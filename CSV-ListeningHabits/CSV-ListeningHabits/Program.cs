@@ -42,7 +42,8 @@ namespace CSV_ListeningHabits
         /// <returns>total number of plays</returns>
         public static int TotalPlays()
         {
-            return 0;
+            //just getting the total number of items in the music data list
+            return musicDataList.Count;
         }
         /// <summary>
         /// A function that returns the number of plays ever by an artist
@@ -51,7 +52,10 @@ namespace CSV_ListeningHabits
         /// <returns>total number of plays</returns>
         public static int TotalPlaysByArtistName(string artistName)
         {
-            return -1;
+            //searches through the data list for artists and then looks for multiples of the same artist and counts them to give the result
+            int totalPlayas = musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Count();
+
+            return totalPlayas;
         }
         /// <summary>
         /// A function that returns the number of plays by a specific artist in a specific year
@@ -61,7 +65,8 @@ namespace CSV_ListeningHabits
         /// <returns>total plays in year</returns>
         public static int TotalPlaysByArtistNameInYear(string artistName, string year)
         {
-            return 0;
+            //narrows down to the play count of specific artists then narrows again by the plays of that artist in a specific year
+            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Where(y => y.Time.ToString("yyyy") == year).Count();
         }
         /// <summary>
         /// A function that returns the number of unique artists in the entire dataset
@@ -69,7 +74,8 @@ namespace CSV_ListeningHabits
         /// <returns>number of unique artists</returns>
         public static int CountUniqueArtists()
         {
-            return 0;
+            //uses the distint function to take avoid all the repeat artist names and counts up the unique artists
+            return musicDataList.Select(x => x.Artist).Distinct().ToList().Count();
         }
         /// <summary>
         /// A function that returns the number of unique artists in a given year
@@ -78,7 +84,8 @@ namespace CSV_ListeningHabits
         /// <returns>unique artists in year</returns>
         public static int CountUniqueArtists(string year)
         {
-            return 0;
+            //first it sorts the list by year, then using distinct it avoids all the repeat artists 
+            return musicDataList.Where(x => x.Time.Year.ToString() == year).Select(x => x.Artist).Distinct().Count();
         }
         /// <summary>
         /// A function that returns a List of unique strings which contains
@@ -88,7 +95,9 @@ namespace CSV_ListeningHabits
         /// <returns>list of song titles</returns>
         public static List<string> TrackListByArtist(string artistName)
         {
-            return new List<string>();
+
+            //first seperates the list by specific artists and then selects their track titles and compiles them into a list
+            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Select(x => x.Title).ToList();
         }
         /// <summary>
         /// A function that returns the first time an artist was ever played
@@ -97,7 +106,8 @@ namespace CSV_ListeningHabits
         /// <returns>DateTime of first play</returns>
         public static DateTime FirstPlayByArtist(string artistName)
         {
-            return new DateTime(1);
+            //seperates the list by specific artists then orders those artists by the time the tracks were played, then gives you the first time that artist was ever played
+            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).OrderBy(x => x.Time).ToList().First().Time;
         }
         /// <summary>
         ///                     ***BONUS***
@@ -128,7 +138,11 @@ namespace CSV_ListeningHabits
             this.Time = posixTime.AddMilliseconds(long.Parse(playData[0]));
 
             // need to populate the rest of the properties
+            this.Artist = playData[1];
 
+            this.Title = playData[2];
+
+            this.Album = playData[3];
         }
     }
 }
