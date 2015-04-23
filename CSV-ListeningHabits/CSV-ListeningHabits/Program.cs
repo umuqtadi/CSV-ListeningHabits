@@ -54,8 +54,9 @@ namespace CSV_ListeningHabits
         {
             //searches through the data list for artists and then looks for multiples of the same artist and counts them to give the result
             int totalPlayas = musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Count();
-
+            
             return totalPlayas;
+            return musicDataList.Count(x => x.Artist.ToLower() == artistName.ToLower());
         }
         /// <summary>
         /// A function that returns the number of plays by a specific artist in a specific year
@@ -67,6 +68,7 @@ namespace CSV_ListeningHabits
         {
             //narrows down to the play count of specific artists then narrows again by the plays of that artist in a specific year
             return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Where(y => y.Time.ToString("yyyy") == year).Count();
+            
         }
         /// <summary>
         /// A function that returns the number of unique artists in the entire dataset
